@@ -9,6 +9,7 @@ import { updatePopupData, shiftCards } from './reducers/popup';
 import cn from './PopUpApp.css';
 import initObject from '../../util/initObject';
 import filter from 'lodash/filter';
+import Tab from "./components/Tab.js";
 
 declare var chrome: any;
 
@@ -50,23 +51,6 @@ function getContainerClass(
       return cn.CardContainer_left;
   }
 }
-
-const Tab = ({
-  className,
-  children,
-  type,
-  onMouseDownHandler,
-}: {
-  className: string,
-  children: any,
-  type: string,
-  onMouseDownHandler: Function,
-}) => (
-  <span className={className} onMouseDown={onMouseDownHandler}>
-    <div data-type={type}>{type}</div>
-    {children}
-  </span>
-);
 
 const RippleTab = ripple(Tab);
 
