@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import map from 'lodash/map';
-import MoreIcon from 'imgs/more_vert.svg';
+
 import ComicCard from 'cmp/ComicCard';
 import ripple from 'cmp/Ripple';
 import { updatePopupData, shiftCards } from './reducers/popup';
@@ -10,17 +10,11 @@ import cn from './PopUpApp.css';
 import initObject from '../../util/initObject';
 import filter from 'lodash/filter';
 import Tab from "./components/Tab.js";
+import MenuButton from "./components/MenuButton.js";
 
 declare var chrome: any;
 
-function stopImmediatePropagation(e) {
-  e.stopPropagation();
-  e.nativeEvent.stopImmediatePropagation();
-}
 
-function preventDefault(e) {
-  e.preventDefault();
-}
 
 function getShiftMarkerClass(
   selectedType: 'update' | 'subscribe' | 'history',
@@ -53,64 +47,6 @@ function getContainerClass(
 }
 
 const RippleTab = ripple(Tab);
-
-const MenuButton = ({
-  children,
-  showMenu,
-  showMenuHandler,
-  onMouseDownHandler,
-  downloadHandler,
-  uploadHandler,
-  resetHandler,
-  aRefHandler,
-  inputRefHandler,
-  fileOnChangeHandler,
-}: {
-  children: any,
-  showMenu: boolean,
-  showMenuHandler: Function,
-  onMouseDownHandler: Function,
-  downloadHandler: Function,
-  uploadHandler: Function,
-  resetHandler: Function,
-  aRefHandler: Function,
-  inputRefHandler: Function,
-  fileOnChangeHandler: Function,
-}) => (
-  <span
-    className={cn.button}
-    onClick={showMenuHandler}
-    onMouseDown={onMouseDownHandler}
-  >
-    <MoreIcon />
-    <div className={cn.rippleContainer}>{children}</div>
-    <div className={showMenu ? cn.menuOn : cn.menuOff}>
-      <div onMouseDown={preventDefault} onClick={downloadHandler}>
-        Download Config
-      </div>
-      <div onMouseDown={preventDefault} onClick={uploadHandler}>
-        Upload Config
-      </div>
-      <div onMouseDown={preventDefault} onClick={resetHandler}>
-        Reset Config
-      </div>
-      <a
-        style={{ display: 'none' }}
-        ref={aRefHandler}
-        onClick={stopImmediatePropagation}
-      >
-        Download Config
-      </a>
-      <input
-        ref={inputRefHandler}
-        type={'file'}
-        style={{ display: 'none' }}
-        onChange={fileOnChangeHandler}
-        onClick={stopImmediatePropagation}
-      />
-    </div>
-  </span>
-);
 
 const RippleMenu = ripple(MenuButton);
 
