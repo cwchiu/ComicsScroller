@@ -10,6 +10,23 @@ Comics Scroller 是一個 chrome extenstion 的開源專案
 訂閱漫畫，漫畫更新會自動通知你  
 直接跳轉本地端頁面 乾淨 無廣告 無惡意多餘javascritp程式碼  
 
+# React Hook 練習
+
+目錄結構
+
+```bash
+/src
+  /js
+    /container
+      /PopupUpApp
+        /reducers
+          - popup.js
+    /reducers
+      - popup.js ; popup reducer
+    /store
+      - configurePopStore.js ; popup store
+    - popup.jsx  ; popup 入口
+```
 # Support Websites
 無限動漫  
 http://www.comicbus.com/  

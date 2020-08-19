@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import MoreIcon from 'imgs/more_vert.svg';
 import cn from '../PopUpApp.css';
 
@@ -24,6 +24,7 @@ export default function ({
     inputRefHandler,
     fileOnChangeHandler,
 }) {
+    
     return (
         <span
             className={cn.button}
