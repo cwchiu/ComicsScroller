@@ -1,4 +1,3 @@
-// @flow
 import map from 'lodash/map';
 import forEach from 'lodash/forEach';
 import initObject from './util/initObject';
@@ -10,8 +9,8 @@ const dm5Regex = /http\:\/\/(tel||www)\.dm5\.com\/(m\d+)\//;
 const sfRegex = /http\:\/\/comic\.sfacg\.com\/(HTML\/[^\/]+\/.+)$/;
 const comicbusRegex = /http\:\/\/(www|v)\.comicbus.com\/online\/(comic-\d+\.html\?ch=.*$)/;
 
-declare var chrome: any;
-declare var ga: any;
+// declare var chrome: any;
+// declare var ga: any;
 
 const fetchChapterPage$ = {
   sf: fetchChapterPage$Sf,
@@ -59,6 +58,7 @@ function sfRefererHandler(details) {
 
 chrome.browserAction.setBadgeBackgroundColor({ color: '#F00' });
 
+// 支援網站阻擋 Request
 chrome.webRequest.onBeforeSendHeaders.addListener(
   dm5RefererHandler,
   { urls: ['http://www.dm5.com/m*/chapterfun*', 'http://*.cdndm5.com/*'] },
@@ -84,65 +84,73 @@ chrome.notifications.onClicked.addListener(id => {
   chrome.notifications.clear(id);
 });
 
+// 漫畫查詢
 function comicsQuery() {
   chrome.storage.local.get(item => {
-    if (typeof item !== 'undefined' && typeof item.subscribe !== 'undefined') {
-      chrome.browserAction.setBadgeText({
-        text: `${item.update.length > 0 ? item.update.length : ''}`,
-      });
-      forEach(item.subscribe, ({ site, comicsID }) => {
-        const { chapterURL } = item[site][comicsID];
-        const fetchChapterPage = fetchChapterPage$[site];
-        fetchChapterPage(chapterURL).subscribe(
-          ({ title, chapterList, coverURL, chapters }) => {
-            const comic = item[site][comicsID];
-            forEach(chapterList, chapterID => {
-              if (!comic.chapters[chapterID]) {
-                chrome.storage.local.get(oldStore =>
-                  chrome.storage.local.set(
-                    {
-                      ...oldStore,
-                      [site]: {
-                        ...oldStore[site],
-                        [comicsID]: {
-                          ...oldStore[site][comicsID],
-                          title,
-                          chapterList,
-                          coverURL,
-                          chapters,
-                        },
-                      },
-                      update: [
-                        {
-                          site,
-                          chapterID,
-                          updateChapter: {
-                            title: chapters[chapterID].title,
-                            href: chapters[chapterID].href,
-                          },
-                          comicsID,
-                        },
-                        ...oldStore.update,
-                      ],
-                    },
-                    () => {
-                      chrome.storage.local.get(store =>
-                        chrome.browserAction.setBadgeText({
-                          text: `${store.update.length}`,
-                        }),
-                      );
-                    },
-                  ),
-                );
-              }
-            });
-          },
-        );
-      });
+
+    if (typeof item === 'undefined' || typeof item.subscribe === 'undefined') {
+      return;
     }
+
+    // 設定漫畫更新數量
+    chrome.browserAction.setBadgeText({
+      text: `${item.update.length > 0 ? item.update.length : ''}`,
+    });
+
+    forEach(item.subscribe, ({ site, comicsID }) => {
+      const { chapterURL } = item[site][comicsID];
+      const fetchChapterPage = fetchChapterPage$[site];
+      fetchChapterPage(chapterURL).subscribe(
+        ({ title, chapterList, coverURL, chapters }) => {
+          const comic = item[site][comicsID];
+          forEach(chapterList, chapterID => {
+            if (!comic.chapters[chapterID]) {
+              chrome.storage.local.get(oldStore =>
+                chrome.storage.local.set(
+                  {
+                    ...oldStore,
+                    [site]: {
+                      ...oldStore[site],
+                      [comicsID]: {
+                        ...oldStore[site][comicsID],
+                        title,
+                        chapterList,
+                        coverURL,
+                        chapters,
+                      },
+                    },
+                    update: [
+                      {
+                        site,
+                        chapterID,
+                        updateChapter: {
+                          title: chapters[chapterID].title,
+                          href: chapters[chapterID].href,
+                        },
+                        comicsID,
+                      },
+                      ...oldStore.update,
+                    ],
+                  },
+                  () => {
+                    chrome.storage.local.get(store =>
+                      chrome.browserAction.setBadgeText({
+                        text: `${store.update.length}`,
+                      }),
+                    );
+                  },
+                ),
+              );
+            }
+          });
+        },
+      );
+    });
+  
   });
 }
 
+// app 版本檢查
 chrome.runtime.onInstalled.addListener(details => {
   if (details.reason === 'update') {
     chrome.storage.local.get(item => {
@@ -208,6 +216,7 @@ chrome.webNavigation.onBeforeNavigate.addListener(
   },
 );
 
+// 每 10 分鐘查詢漫畫是否有更新
 chrome.alarms.create('comcisScroller', {
   when: Date.now(),
   periodInMinutes: 10,
