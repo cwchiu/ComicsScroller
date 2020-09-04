@@ -1,6 +1,6 @@
-import React, {useCallback} from 'react';
+import React from 'react';
 import MoreIcon from 'imgs/more_vert.svg';
-import cn from '../PopUpApp.css';
+import cn from './index.css';
 
 function preventDefault(e) {
     e.preventDefault();
