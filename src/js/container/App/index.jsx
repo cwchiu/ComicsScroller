@@ -13,7 +13,7 @@ import GithubIcon from 'imgs/github.svg';
 import IconButton from '../../component/IconButton';
 import cn from './App.css';
 import ImgContainer from '../ImgContainer';
-import ChapterList from '../ChapterList';
+import ChapterList from '../../component/ChapterList';
 import {
   resetImg,
   updateChapterLatestIndex,
