@@ -12,7 +12,7 @@ import FbIcon from 'imgs/facebook.svg';
 import GithubIcon from 'imgs/github.svg';
 import IconButton from '../../component/IconButton';
 import cn from './App.css';
-import ImgContainer from '../ImgContainer';
+import ImgContainer from '../../component/ImgContainer';
 import ChapterList from '../../component/ChapterList';
 import {
   resetImg,
