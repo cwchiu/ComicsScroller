@@ -1,6 +1,5 @@
-// @flow
 import { combineReducers } from 'redux';
-import popup from '../container/PopUpApp/reducers/popup';
+import popup from '../component/PopUpApp/reducers/popup';
 
 const rootReducer = combineReducers({
   popup,

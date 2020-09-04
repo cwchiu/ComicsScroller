@@ -1,6 +1,5 @@
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { usePopupAppAction, usePopupState } from "./hook";
-import { useState, useEffect } from "react";
 import cn from './PopUpApp.css';
 import ripple from 'cmp/Ripple';
 import Tab from "./components/Tab.js";
@@ -17,7 +16,8 @@ const App = () => {
     const { updatePopupData, shiftCards } = usePopupAppAction();
     const [selectedType, setSelectedType] = useState('update');
     const [showMenu, setShowMenu] = useState(false);
-
+    const aRef = useRef(null);
+    const fileInput = useRef(null);
     useEffect(() => {
         chrome.storage.local.get(item => {
             console.log(item)
@@ -38,18 +38,18 @@ const App = () => {
             const json = JSON.stringify(item);
             const blob = new Blob([json], { type: 'octet/stream' });
             const url = window.URL.createObjectURL(blob);
-            //   if (this.aRef) {
-            //     this.aRef.href = url;
-            //     this.aRef.download = 'ComicsScroller_config.json';
-            //     this.aRef.click();
-            //     window.URL.revokeObjectURL(url);
-            //   }
+              if (aRef.current) {
+                aRef.current.href = url;
+                aRef.current.download = 'ComicsScroller_config.json';
+                aRef.current.click();
+                window.URL.revokeObjectURL(url);
+              }
         });
     };
     const uploadHandler = () => {
-        // if (this.fileInput) {
-        //   this.fileInput.click();
-        // }
+        if (fileInput.current) {
+          fileInput.current.click();
+        }
     };
 
     const resetHandler = () => {
@@ -81,13 +81,13 @@ const App = () => {
                 }
             });
         };
-        fr.readAsText(this.fileInput.files.item(0));
+        fr.readAsText(fileInput.current.files.item(0));
     };
     const transitionEndHandler = e => {
         const index = parseInt(e.target.getAttribute('data-index'), 10);
         const move = e.target.getAttribute('data-move');
         const shift = e.target.getAttribute('data-shift');
-        const category = this.state.selectedType;
+        const category = selectedType;
         let len = update.length;
         if (category === 'history') {
             len = history.length;
@@ -108,12 +108,13 @@ const App = () => {
             });
         }
     };
+
     const aRefHandler = node => {
-        // this.aRef = node;
+        aRef.current = node;
     };
 
     const inputRefHandler = node => {
-        // this.fileInput = node;
+        fileInput.current = node;
     };
 
     return (

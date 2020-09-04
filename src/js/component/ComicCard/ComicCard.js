@@ -9,7 +9,7 @@ import filter from 'lodash/filter';
 import pickBy from 'lodash/pickBy';
 import {
     moveCard,
-} from '../../container/PopUpApp/reducers/popup';
+} from '../PopUpApp/reducers/popup';
 function getComicCardClass(shift, move) {
     if (move) return cn.ComicCard_move;
     if (shift) return cn.ComicCard_shift;
