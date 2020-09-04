@@ -19,7 +19,7 @@ render(
 );
 
 if (module.hot) {
-  module.hot.accept('./container/App', () => {
+  module.hot.accept('./component/Reader', () => {
     render(
       <AppContainer>
         <Provider store={store}>

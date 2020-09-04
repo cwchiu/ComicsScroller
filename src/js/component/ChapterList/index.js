@@ -4,9 +4,9 @@ import {
     resetImg,
     updateChapterLatestIndex,
     updateRenderIndex,
-} from '../../container/App/reducers/comics';
-import { fetchImgList, updateReaded } from '../../container/App/reducers/dm5Epic';
-import { stopScroll } from '../../container/App/reducers/scrollEpic';
+} from '../../reducers/comics';
+import { fetchImgList, updateReaded } from '../../reducers/dm5Epic';
+import { stopScroll } from '../../reducers/scrollEpic';
 import cn from './ChapterList.css';
 import { useSelector } from 'react-redux'
 import { useDispatch } from 'react-redux';

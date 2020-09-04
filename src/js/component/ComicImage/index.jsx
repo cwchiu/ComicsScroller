@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import cn from './ComicImage.css';
-import { updateImgType } from '../../container/App/reducers/comics';
+import { updateImgType } from '../../reducers/comics';
 
 function getImgClass(type: string) {
   switch (type) {
