@@ -3,7 +3,7 @@ import { createSelector } from 'reselect';
 import map from 'lodash/map';
 import reduce from 'lodash/reduce';
 import filter from 'lodash/filter';
-import Loading from 'cmp/Loading';
+import Loading from '../Loading';
 import ConnectedComicImage from '../ComicImage';
 import cn from './ImgContainer.css';
 import { useSelector } from 'react-redux'
