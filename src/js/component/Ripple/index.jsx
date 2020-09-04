@@ -1,7 +1,7 @@
 // @flow
 import React, { PureComponent } from 'react';
 import { map, filter } from 'lodash';
-import RippleCircle from './RippleCircle';
+import RippleCircle from '../RippleCircle';
 
 const ripple = (WrapComponent: Class<React.Component<*, *, *>> | Function) => {
   class RippleComponent extends PureComponent {
