@@ -17,8 +17,14 @@ Comics Scroller 是一個 chrome extenstion 的開源專案
 ```bash
 /src
   /js
-    /container
-      /PopupUpApp
+    /component
+      /ComicCard
+        - ComicCard.js
+        - Item.js
+        - Icon.js
+        - index.js
+      /ComicImage ; 顯示漫畫單頁圖片
+      /PopupUpApp ; popup
         /reducers
           - popup.js
     /reducers

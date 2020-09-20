@@ -1,22 +1,15 @@
 import React from "react";
 import PropTypes from 'prop-types';
-import cn from './ComicCard.css';
-import TrashTopIcon from 'imgs/bin_top.svg';
-import TrashBodyIcon from 'imgs/bin_body.svg';
-import { useSelector } from 'react-redux'
-import { useDispatch } from 'react-redux';
-import filter from 'lodash/filter';
-import pickBy from 'lodash/pickBy';
+import { useSelector, useDispatch } from 'react-redux'
+import { filter, pickBy } from 'lodash';
+import ComicCard from "./ComicCard";
+
 import {
     moveCard,
 } from '../PopUpApp/reducers/popup';
-function getComicCardClass(shift, move) {
-    if (move) return cn.ComicCard_move;
-    if (shift) return cn.ComicCard_shift;
-    return cn.ComicCard;
-}
 
-const ComicCard = ({ category, site, index, move, shift, comicsID, updateChapter }) => {
+
+const Component = ({ chapterID, category, site, index, move, shift, comicsID, updateChapter }) => {
     const dispatch = useDispatch();
 
     const { title, chapterURL,
@@ -88,8 +81,7 @@ const ComicCard = ({ category, site, index, move, shift, comicsID, updateChapter
             chrome.storage.local.set(newStore, err => {
                 if (!err) {
                     chrome.browserAction.setBadgeText({
-                        text: `${
-                            newStore.update.length === 0 ? '' : newStore.update.length
+                        text: `${newStore.update.length === 0 ? '' : newStore.update.length
                             }`,
                     });
                     dispatch(moveCard(category, index));
@@ -115,54 +107,19 @@ const ComicCard = ({ category, site, index, move, shift, comicsID, updateChapter
         chrome.tabs.create({ url: lastChapter.href });
     }
     return (
-        <div
-            className={getComicCardClass(shift, move)}
-            data-index={index}
-            data-move={move}
-            data-shift={shift}
-        >
-            <img src={coverURL} alt={'cover'} />
-            <div className={cn.trash} onClick={removeHandler}>
-                <TrashTopIcon className={cn.trashTop} />
-                <TrashBodyIcon className={cn.trashBody} />
-            </div>
-            <div className={cn.infor}>
-                <h1 onClick={pageClickHandler}>{title}</h1>
-                <div className={cn.itemContainer}>
-                    <div>
-                        <span>來源網站</span>
-                        <span onClick={siteClickHandler}>{site}</span>
-                    </div>
-                    {updateChapter ? (
-                        <div>
-                            <span>更新章節</span>
-                            <span onClick={updateChapterHandler}>
-                                {updateChapter.title}
-                            </span>
-                        </div>
-                    ) : (
-                            undefined
-                        )}
-                    <div>
-                        <span>上次看到</span>
-                        <span onClick={lastReadHandler}>
-                            {lastReaded.title}
-                        </span>
-                    </div>
-                    <div>
-                        <span>最新一話</span>
-                        <span onClick={lastChapterHandler}>
-                            {lastChapter.title}
-                        </span>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <ComicCard index={index} move={move} shift={shift} coverURL={coverURL} chapterID={chapterID}
+            siteName={site} onClickSite={siteClickHandler}
+            title={title} onClickTitle={pageClickHandler}
+            onClickRemove={removeHandler}
+            updateTitle={updateChapter ? updateChapter.title : ''} onClickUpdateTitle={updateChapterHandler}
+            lastReadTitle={lastReaded.title} onClickLastReadTitle={lastReadHandler}
+            lastChapterTitle={lastChapter.title} onClickLastChapterTitle={lastChapterHandler}
+        />
     )
 };
 
-ComicCard.propTypes = {
-    category: PropTypes.string.isRequired,
+Component.propTypes = {
+    category: PropTypes.oneOf(['history', 'subscribe', 'update']).isRequired,
     site: PropTypes.string.isRequired,
     index: PropTypes.number.isRequired,
     comicsID: PropTypes.string.isRequired,
@@ -175,4 +132,4 @@ ComicCard.propTypes = {
     }),
 };
 
-export default ComicCard;
+export default Component;
